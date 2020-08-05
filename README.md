@@ -1,8 +1,8 @@
 # babelizer
-Automatically translate the contents of your Flask-Babel `.po` files. 
+Automatically translate the contents of your Flask-Babel `.po` files.
 
 ### Requirements
-- Dryscrape (`pip3 install dryscrape`)
+- [Dryscrape](https://dryscrape.readthedocs.io/en/latest/installation.html) (`pip3 install dryscrape`). Requirements may differ per system. Check the link.
 
 ### Rationale
 Having to manually translate the contents on the generated `messages.po` files is tedious. Wanted a way to automate the translation.
