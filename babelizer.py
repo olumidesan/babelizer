@@ -252,6 +252,7 @@ def translate_po(folder):
                         # e.g french is `fr`
                         lang = ISO_639_1_CODES[lang]
                     
+                    print(f"Translating {lang}...")
                     # Translate lines 
                     if line.startswith('msgid') and index != 5:
                         # Text to translate (ttt)
