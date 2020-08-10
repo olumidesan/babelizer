@@ -252,27 +252,33 @@ def translate_po(folder):
                         # e.g french is `fr`
                         lang = ISO_639_1_CODES[lang]
                     
-                    print(f"Translating {lang}...")
                     # Translate lines 
                     if line.startswith('msgid') and index != 5:
-                        # Text to translate (ttt)
-                        ttt = line[6:].strip('\n').strip('"')
-
-                        # Compose Google Translate FQ URL
-                        url =  f"{BASE_GOOGLE_TRANSLATE_URL}{_encode_query_parameters(DEFAULT_BABEL_LANGUAGE, lang, ttt)}"
-
-                        # Using Dryscrape, visit URL
-                        session.visit(url)
-
-                        # Get translated text
-                        tt = session.at_css(TRANSLATED_TEXT_SELECTOR).text()
-
-                        # Translated text
-                        tl = f'msgstr "{tt}"'
                         
-                        # Write original line
-                        f.write(line)
-                        continue                    
+                        try:
+                            # Text to translate (ttt)
+                            ttt = line[6:].strip('\n').strip('"')
+
+                            # Compose Google Translate FQ URL
+                            url =  f"{BASE_GOOGLE_TRANSLATE_URL}{_encode_query_parameters(DEFAULT_BABEL_LANGUAGE, lang, ttt)}"
+
+                            # Using Dryscrape, visit URL
+                            session.visit(url)
+
+                            # Get translated text
+                            tt = session.at_css(TRANSLATED_TEXT_SELECTOR).text()
+
+                            # Translated text
+                            tl = f'msgstr "{tt}"'
+                        
+                        except:
+                            # Translated text the same
+                            tl = f'msgstr "{ttt}"'
+
+                        finally:                            
+                            # Write original id line
+                            f.write(line)
+                            continue                 
     
                     f.write(line)
 
