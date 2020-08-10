@@ -279,6 +279,7 @@ def translate_po(folder):
                                 tl = f'msgstr "{tt}"'
                             
                             except:
+                                print(f"[Warning]: Could not translate {ttt}. Defaulting to original...")
                                 # Translated text is the same
                                 tl = f'msgstr "{ttt}"'
 
