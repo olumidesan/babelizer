@@ -222,11 +222,13 @@ def translate_po(folder):
         lang = '' 
         # If a 'message.po' file
         if BABEL_FILE_NAME in files:
+
             # Copy contents
             with open(os.path.join(dir, BABEL_FILE_NAME)) as f:
                 fc = f.readlines()
 
-            with open(os.path.join(dir, f"t_{BABEL_FILE_NAME}"), 'w+') as f:
+            # Rewrite
+            with open(os.path.join(dir, BABEL_FILE_NAME), 'w+') as f:
                 # Holder for a translated line. 
                 tl = None 
 
@@ -254,32 +256,37 @@ def translate_po(folder):
                     
                     # Translate lines 
                     if line.startswith('msgid') and index != 5:
-                        
-                        try:
-                            # Text to translate (ttt)
-                            ttt = line[6:].strip('\n').strip('"')
 
-                            # Compose Google Translate FQ URL
-                            url =  f"{BASE_GOOGLE_TRANSLATE_URL}{_encode_query_parameters(DEFAULT_BABEL_LANGUAGE, lang, ttt)}"
+                        # Previously translated text
+                        pvt = fc[index+1][7:].strip('\n').strip('"')
 
-                            # Using Dryscrape, visit URL
-                            session.visit(url)
+                        # Hasn't been previously translated
+                        if pvt == '':                            
+                            try:
+                                # Text to translate (ttt)
+                                ttt = line[6:].strip('\n').strip('"')
 
-                            # Get translated text
-                            tt = session.at_css(TRANSLATED_TEXT_SELECTOR).text()
+                                # Compose Google Translate FQ URL
+                                url =  f"{BASE_GOOGLE_TRANSLATE_URL}{_encode_query_parameters(DEFAULT_BABEL_LANGUAGE, lang, ttt)}"
 
-                            # Translated text
-                            tl = f'msgstr "{tt}"'
-                        
-                        except:
-                            # Translated text the same
-                            tl = f'msgstr "{ttt}"'
+                                # Using Dryscrape, visit URL
+                                session.visit(url)
 
-                        finally:                            
-                            # Write original id line
-                            f.write(line)
-                            continue                 
-    
+                                # Get translated text
+                                tt = session.at_css(TRANSLATED_TEXT_SELECTOR).text()
+
+                                # Translated text
+                                tl = f'msgstr "{tt}"'
+                            
+                            except:
+                                # Translated text is the same
+                                tl = f'msgstr "{ttt}"'
+
+                            finally:                            
+                                # Write original id line
+                                f.write(line)
+                                continue            
+
                     f.write(line)
 
 
@@ -292,6 +299,3 @@ def main():
         exit()
 
 main() if __name__ == "__main__" else None
-
-
-

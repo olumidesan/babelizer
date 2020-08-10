@@ -14,7 +14,7 @@ This script does this, leveraging on Google Translate.
 
 ![](sc.png)
 
-3. Simply run `python3 babelizer.py` and a new `.po` file (`t_messages.po`) will be generated in the same folder containing the translated text.
+3. Simply run `python3 babelizer.py` and the `.po` file (`messages.po`) will be updated with the translated text.
 
 ### Example
 The below shows the generated `.po` files after conversion
