@@ -1,4 +1,4 @@
-# /usr/bin/python3
+#! /usr/bin/python3
 
 import os
 import dryscrape
@@ -17,6 +17,12 @@ TRANSLATED_TEXT_SELECTOR = "body > div.container > div.frame > div.page.tlid-hom
                             div.homepage-content-wrap > div.tlid-source-target.main-header > div.source-target-row > \
                             div.tlid-results-container.results-container > div.tlid-result.result-dict-wrapper > \
                             div.result.tlid-copy-target > div.text-wrap.tlid-copy-target > div > span.tlid-translation.translation > span"
+
+# Will be used in cases where Google Translate splits the resulting translation into feminine and masculine (Not yet done)
+TRANSLATED_TEXT_SELECTOR_SEC = "body > div.container > div.frame > div.page.tlid-homepage.homepage.translate-text > \
+                                div.homepage-content-wrap > div.tlid-source-target.main-header > div.source-target-row > \
+                                div.tlid-results-container.results-container.gendered-translations > div:nth-child(6) > \
+                                div.result.tlid-copy-target > div.text-wrap.tlid-copy-target > div > span.tlid-translation.translation"                            
                 
 # Mapping of ISO-639-1 codes as gotten from https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 ISO_639_1_CODES = dict(
@@ -279,7 +285,7 @@ def translate_po(folder):
                                 tl = f'msgstr "{tt}"'
                             
                             except:
-                                print(f"[Warning]: Could not translate {ttt}. Defaulting to original...")
+                                print(f"[Warning]: [{lang.upper()}]: Could not translate '{ttt}'. Defaulted to original.")
                                 # Translated text is the same
                                 tl = f'msgstr "{ttt}"'
 
@@ -300,3 +306,6 @@ def main():
         exit()
 
 main() if __name__ == "__main__" else None
+
+
+
